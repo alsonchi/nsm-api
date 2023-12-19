@@ -17,5 +17,6 @@ jobs:
           aws-region: ap-southeast-1
       - run: |
           pip install -r requirements.txt -t ./
+      - run: |
           zip -r lamdba_function.zip ./
           aws lambda update-function-code --function-name=nsm-frineds-add  --zip-file=fileb://lamdba_function.zip
