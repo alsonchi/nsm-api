@@ -8,17 +8,16 @@ jobs:
   build-deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
       - uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-southeast-1
       - run: |
-          mkdir python
-          pip install -r requirements.txt python
-          mv python/* ./
-          rm -rf python
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt .
+
           zip -r lamdba_function.zip ./
           aws lambda update-function-code --function-name=nsm-frineds-add  --zip-file=fileb://lamdba_function.zip
