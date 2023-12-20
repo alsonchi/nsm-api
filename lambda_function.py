@@ -3,6 +3,7 @@ import jwt
 import boto3
 
 dynamodb = boto3.resource("dynamodb", region_name="ap-southeast-1")
+table = dynamodb.Table("nsm-user")
 
 def auth(headers):
     if "Authorization" not in headers:
@@ -12,9 +13,6 @@ def auth(headers):
     
     #jwt decode
     payload = jwt.decode(token, "secret", algorithms=["HS256"])
-    
-    #check user token
-    table = dynamodb.Table("nsm-user")
     
     #find user
     user = table.query(
@@ -41,9 +39,14 @@ def lambda_handler(event, context):
         }
     
     data = json.loads(event["body"])
-    addUserName = data["user_name"]
 
-    table = dynamodb.Table("nsm-user")
+    if "username" not in data:
+        return {
+            'statusCode': 403,
+            'body': json.dumps({"code": "missing_input", "message": "username is required"}),
+        }
+
+    addUserName = data["username"]
 
     if "friends" not in user:
         user["friends"] = []
