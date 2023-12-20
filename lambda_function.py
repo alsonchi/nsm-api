@@ -10,10 +10,6 @@ def auth(headers):
     
     #jwt decode
     payload = jwt.decode(token, "secret", algorithms=["HS256"])
-        
-    return payload
-    
-    username = "alson"
     
     #check user token
     dynamodb = boto3.resource("dynamodb", region_name="ap-southeast-1")
@@ -22,7 +18,7 @@ def auth(headers):
     #find user
     user = table.query(
         KeyConditions={
-            "user_name": {"AttributeValueList": [username], "ComparisonOperator": "EQ"}
+            "user_name": {"AttributeValueList": [payload['user_name']], "ComparisonOperator": "EQ"}
         }
     )
     
