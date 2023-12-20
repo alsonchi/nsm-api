@@ -2,22 +2,6 @@ import json
 import jwt
 import boto3
 
-def lambda_handler(event, context):
-    
-    user = auth.auth(event['headers'])
-    
-    if user is None:
-        return {
-            'statusCode': 401,
-            'body': json.dumps({"code": "unauthorized", "message": "Unauthorized"}),
-        }
-    
-    # TODO implement
-    return {
-        'statusCode': 200,
-        'body': json.dumps(user)
-    }
-
 def auth(headers):
     if "Authorization" not in headers:
         return None
@@ -48,3 +32,19 @@ def auth(headers):
     
     return user["Items"][0]
     
+
+def lambda_handler(event, context):
+    
+    user = auth(event['headers'])
+    
+    if user is None:
+        return {
+            'statusCode': 401,
+            'body': json.dumps({"code": "unauthorized", "message": "Unauthorized"}),
+        }
+    
+    # TODO implement
+    return {
+        'statusCode': 200,
+        'body': json.dumps(user)
+    }
