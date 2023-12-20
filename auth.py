@@ -1,4 +1,5 @@
 import boto3
+import jwt
 
 def auth(headers):
     if "Authorization" not in headers:
@@ -7,6 +8,10 @@ def auth(headers):
     token = (headers["Authorization"]).replace("Bearer ", "")
     
     #jwt decode
+    payload = jwt.decode(token, "secret", algorithm="HS256")
+        
+    return payload
+    
     username = "alson"
     
     #check user token
