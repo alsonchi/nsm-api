@@ -48,14 +48,14 @@ def lambda_handler(event, context):
 
     addUserName = data["username"]
 
-    #check system has this user
-    addUser = table.query(
+    #check user exits
+    checkUserResult = table.query(
         KeyConditions={
             "user_name": {"AttributeValueList": [addUserName], "ComparisonOperator": "EQ"}
         }
     )
 
-    if addUser is None:
+    if len(checkUserResult["Items"]) <= 0:
         return {
             'statusCode': 403,
             'body': json.dumps({"code": "user_not_found", "message": "User not found"}),
