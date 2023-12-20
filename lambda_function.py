@@ -48,9 +48,24 @@ def lambda_handler(event, context):
 
     addUserName = data["username"]
 
+    #check system has this user
+    addUser = table.query(
+        KeyConditions={
+            "user_name": {"AttributeValueList": [addUserName], "ComparisonOperator": "EQ"}
+        }
+    )
+
+    if addUser is None:
+        return {
+            'statusCode': 403,
+            'body': json.dumps({"code": "user_not_found", "message": "User not found"}),
+        }
+    
+    #check has friends field
     if "friends" not in user:
         user["friends"] = []
 
+    #check add user is not friend
     if addUserName in user["friends"]:
         return {
             'statusCode': 403,
@@ -58,7 +73,7 @@ def lambda_handler(event, context):
         }
     
     user["friends"].append(addUserName)
-
+    
     #add friends
     table.update_item(Key={'user_name':user['user_name']}, AttributeUpdates={'friends': {'Value': user["friends"], 'Action': "PUT"}})
     
