@@ -8,7 +8,7 @@ def auth(headers):
     token = (headers["Authorization"]).replace("Bearer ", "")
     
     #jwt decode
-    payload = jwt.decode(token, "secret", algorithm="HS256")
+    payload = jwt.decode(token, "secret", algorithms=["HS256"])
         
     return payload
     
