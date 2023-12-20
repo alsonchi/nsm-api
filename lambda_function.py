@@ -2,6 +2,8 @@ import json
 import jwt
 import boto3
 
+dynamodb = boto3.resource("dynamodb", region_name="ap-southeast-1")
+
 def auth(headers):
     if "Authorization" not in headers:
         return None
@@ -12,7 +14,6 @@ def auth(headers):
     payload = jwt.decode(token, "secret", algorithms=["HS256"])
     
     #check user token
-    dynamodb = boto3.resource("dynamodb", region_name="ap-southeast-1")
     table = dynamodb.Table("nsm-user")
     
     #find user
@@ -39,7 +40,26 @@ def lambda_handler(event, context):
             'body': json.dumps({"code": "unauthorized", "message": "Unauthorized"}),
         }
     
-    # TODO implement
+    data = json.loads(event["body"])
+    addUserName = data["user_name"]
+
+    table = dynamodb.Table("nsm-user")
+
+    if "friends" not in user:
+        user["friends"] = []
+
+    if addUserName in user["friends"]:
+        return {
+            'statusCode': 403,
+            'body': json.dumps({"code": "already_exists", "message": "Friend already exists"}),
+        }
+    
+    user["friends"].append(addUserName)
+
+    #add friends
+    table.update_item(Key={'user_name':user['user_name']}, AttributeUpdates={'friends': {'Value': user["friends"], 'Action': "PUT"}})
+    
+    # TODO implement    
     return {
         'statusCode': 200,
         'body': json.dumps(user)
