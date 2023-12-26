@@ -44,6 +44,7 @@ def get_user_info(username):
         'user_name': user["Items"][0].get('user_name'),
         'display_name' : user["Items"][0].get('display_name'),
         'avatar' : user["Items"][0].get('avatar'),
+        'status': user["Items"][0].get('status'),
     }
     
 
