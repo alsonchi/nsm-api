@@ -24,4 +24,5 @@ jobs:
           aws lambda update-function-code --function-name=nsm-frineds-add  --zip-file=fileb://lamdba_function.zip
           aws lambda update-function-code --function-name=nsm-frineds  --zip-file=fileb://lamdba_function.zip
           aws lambda update-function-code --function-name=nsm-conversations-create  --zip-file=fileb://lamdba_function.zip
+          aws lambda update-function-code --function-name=nsm-conversations  --zip-file=fileb://lamdba_function.zip
           aws lambda update-function-code --function-name=nsm-message-send  --zip-file=fileb://lamdba_function.zip

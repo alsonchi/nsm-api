@@ -29,8 +29,8 @@ def lambda_handler(event, context):
     
     
     #create new conversation
-    msgTable = dynamodb.Table("nsm-message")
-    msgTable.put_item(
+    conversationTable = dynamodb.Table("nsm-conversation")
+    conversationTable.put_item(
       Item={
         'uuid': str(uuid.uuid4()),
         'users': [
