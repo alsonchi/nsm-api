@@ -35,7 +35,7 @@ def lambda_handler(event, context):
       Item={
         'uuid': str(uuid.uuid4()),
         'conversation_id': conversationId,
-        'sender': user['username'],
+        'sender': user['user_name'],
         'send_at': time.time(),
         'type': msgType,
         'body': msgBody,
