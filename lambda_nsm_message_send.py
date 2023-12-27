@@ -73,14 +73,17 @@ def lambda_handler(event, context):
         }
     )
 
+    print(receivers)
+    print(receivers['Items'])
 
     for receiver in receivers['Items']:
-        if receiver['ws_connection_id'] is not None:
-            sendMsg(receiver['ws_connection_id'], {
-                'conversationId': conversationId,
-                'type': msgType,
-                'body': msgBody,
-            })
+        print(receiver)
+        # if receiver['ws_connection_id'] is not None:
+        #     sendMsg(receiver['ws_connection_id'], {
+        #         'conversationId': conversationId,
+        #         'type': msgType,
+        #         'body': msgBody,
+        #     })
 
     # TODO implement
     return {"statusCode": 200, "body": json.dumps("Send")}
