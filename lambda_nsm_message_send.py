@@ -9,8 +9,10 @@ dynamodb = boto3.resource("dynamodb", region_name="ap-southeast-1")
 userTable = dynamodb.Table("nsm-user")
 
 def sendMsg(receiver, payload):
-    print(receiver)
-    ws.post_to_connection(Data=json.dumps(payload), ConnectionId=receiver)
+    try:
+        ws.post_to_connection(Data=json.dumps(payload), ConnectionId=receiver)
+    except:
+        print(receiver + " - Connection is closed")
 
 def lambda_handler(event, context):
         
