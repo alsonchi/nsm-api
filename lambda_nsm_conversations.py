@@ -16,16 +16,12 @@ def lambda_handler(event, context):
         }
     
     conversationTable = dynamodb.Table("nsm-conversation")
-    data = conversationTable.scan(
-        AttributesToGet=[
-            'uuid'
-            'users',
-        ],
-        Select='SPECIFIC_ATTRIBUTES',
+
+    conversations = conversationTable.scan(
         FilterExpression= Attr("users").contains(user['user_name'])
     )
 
     return {
         'statusCode': 200,
-        'body': json.dumps(data['Items'])
+        'body': json.dumps(conversations['Items'])
     }
