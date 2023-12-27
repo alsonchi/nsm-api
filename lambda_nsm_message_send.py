@@ -59,6 +59,8 @@ def lambda_handler(event, context):
         }
     )
 
+    print(receivers)
+
     for receiver in receivers:
         sendMsg(receiver, {
             'conversationId': conversationId,
