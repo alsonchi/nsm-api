@@ -9,7 +9,7 @@ dynamodb = boto3.resource("dynamodb", region_name="ap-southeast-1")
 userTable = dynamodb.Table("nsm-user")
 
 def sendMsg(receiver, payload):
-    ws.post_to_connection(Data=json.dumps(payload), ConnectionId=receiver['ws_connection_id'])
+    ws.post_to_connection(Data=json.dumps(payload), ConnectionId=receiver)
 
 def lambda_handler(event, context):
         
@@ -73,17 +73,13 @@ def lambda_handler(event, context):
         }
     )
 
-    print(receivers)
-    print(receivers['Items'])
-
     for receiver in receivers['Items']:
-        print(receiver)
-        # if receiver['ws_connection_id'] is not None:
-        #     sendMsg(receiver['ws_connection_id'], {
-        #         'conversationId': conversationId,
-        #         'type': msgType,
-        #         'body': msgBody,
-        #     })
+        if receiver['ws_connection_id'] is not None:
+            sendMsg(receiver['ws_connection_id'], {
+                'conversationId': conversationId,
+                'type': msgType,
+                'body': msgBody,
+            })
 
     # TODO implement
     return {"statusCode": 200, "body": json.dumps("Send")}
