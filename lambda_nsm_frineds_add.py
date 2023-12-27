@@ -1,36 +1,13 @@
 import json
-import jwt
 import boto3
+import auth
 
 dynamodb = boto3.resource("dynamodb", region_name="ap-southeast-1")
-table = dynamodb.Table("nsm-user")
-
-def auth(headers):
-    if "Authorization" not in headers:
-        return None
-        
-    token = (headers["Authorization"]).replace("Bearer ", "")
-    
-    #jwt decode
-    payload = jwt.decode(token, "secret", algorithms=["HS256"])
-    
-    #find user
-    user = table.query(
-        KeyConditions={
-            "user_name": {"AttributeValueList": [payload['user_name']], "ComparisonOperator": "EQ"}
-        }
-    )
-    
-    #check token
-    if user["Items"][0]["token"] != token:
-        return None
-    
-    return user["Items"][0]
-    
+userTable = dynamodb.Table("nsm-user")
 
 def lambda_handler(event, context):
     
-    user = auth(event['headers'])
+    user = auth.auth(event['headers'])
     
     if user is None:
         return {
@@ -49,7 +26,7 @@ def lambda_handler(event, context):
     addUserName = data["username"]
 
     #check user exits
-    checkUserResult = table.query(
+    checkUserResult = userTable.query(
         KeyConditions={
             "user_name": {"AttributeValueList": [addUserName], "ComparisonOperator": "EQ"}
         }
@@ -75,7 +52,7 @@ def lambda_handler(event, context):
     user["friends"].append(addUserName)
     
     #add friends
-    table.update_item(Key={'user_name':user['user_name']}, AttributeUpdates={'friends': {'Value': user["friends"], 'Action': "PUT"}})
+    userTable.update_item(Key={'user_name':user['user_name']}, AttributeUpdates={'friends': {'Value': user["friends"], 'Action': "PUT"}})
     
     # TODO implement    
     return {
