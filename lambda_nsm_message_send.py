@@ -43,8 +43,22 @@ def lambda_handler(event, context):
     )
 
 
-    # scan 
-    friends = user['friends']
+    #find conversation
+    conversationTable = dynamodb.Table("nsm-conversation")
+    conversation = conversationTable.query(
+        KeyConditions={
+            "uuid": {"AttributeValueList": [conversationId], "ComparisonOperator": "EQ"}
+        }
+    )
+
+    if len(conversation["Items"]) <= 0: 
+        return {
+            'statusCode': 404,
+            'body': json.dumps({"code": "not_found", "message": "Conversation not found"}),
+        }
+    
+    # notifiy user 
+    conversationUsers = conversation["Items"][0]["users"]
     
     receivers = userTable.scan(
         AttributesToGet=[
@@ -53,20 +67,20 @@ def lambda_handler(event, context):
         Select='SPECIFIC_ATTRIBUTES',
         ScanFilter={
             'user_name': {
-                'AttributeValueList': friends,
+                'AttributeValueList': conversationUsers,
                 'ComparisonOperator': 'IN'
             }
         }
     )
 
-    print(receivers)
 
-    for receiver in receivers:
-        sendMsg(receiver, {
-            'conversationId': conversationId,
-            'type': msgType,
-            'body': msgBody,
-        })
+    for receiver in receivers['Items']:
+        if receiver['ws_connection_id'] is not None:
+            sendMsg(receiver['ws_connection_id'], {
+                'conversationId': conversationId,
+                'type': msgType,
+                'body': msgBody,
+            })
 
     # TODO implement
     return {"statusCode": 200, "body": json.dumps("Send")}
