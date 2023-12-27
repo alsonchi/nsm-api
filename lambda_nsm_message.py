@@ -8,8 +8,14 @@ dynamodb = boto3.resource("dynamodb", region_name="ap-southeast-1")
 def lambda_handler(event, context):
     
     user = auth.auth(event['headers'])
+
+    if user is None:
+        return {
+            'statusCode': 401,
+            'body': json.dumps({"code": "unauthorized", "message": "Unauthorized"}),
+        }
     
-    conversationId = event['queryStringParameters']['conversation_id'];
+    conversationId = event['queryStringParameters']['conversation_id']
     last = event['queryStringParameters'].get('last')
     
     #check user in conversation

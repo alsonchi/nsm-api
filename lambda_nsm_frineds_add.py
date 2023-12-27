@@ -34,7 +34,7 @@ def lambda_handler(event, context):
 
     if len(checkUserResult["Items"]) <= 0:
         return {
-            'statusCode': 403,
+            'statusCode': 404,
             'body': json.dumps({"code": "user_not_found", "message": "User not found"}),
         }
     
