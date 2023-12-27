@@ -9,6 +9,7 @@ dynamodb = boto3.resource("dynamodb", region_name="ap-southeast-1")
 userTable = dynamodb.Table("nsm-user")
 
 def sendMsg(receiver, payload):
+    print(receiver)
     ws.post_to_connection(Data=json.dumps(payload), ConnectionId=receiver)
 
 def lambda_handler(event, context):
