@@ -12,6 +12,11 @@ def lambda_handler(event, context):
     if user is None:
         return {
             'statusCode': 401,
+            'headers': {
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
+            },
             'body': json.dumps({"code": "unauthorized", "message": "Unauthorized"}),
         }
     
@@ -20,6 +25,11 @@ def lambda_handler(event, context):
     if "username" not in data:
         return {
             'statusCode': 403,
+            'headers': {
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
+            },
             'body': json.dumps({"code": "missing_input", "message": "username is required"}),
         }
 
@@ -35,6 +45,11 @@ def lambda_handler(event, context):
     if len(checkUserResult["Items"]) <= 0:
         return {
             'statusCode': 404,
+            'headers': {
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
+            },
             'body': json.dumps({"code": "user_not_found", "message": "User not found"}),
         }
     
@@ -46,6 +61,11 @@ def lambda_handler(event, context):
     if addUserName in user["friends"]:
         return {
             'statusCode': 403,
+            'headers': {
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
+            },
             'body': json.dumps({"code": "already_exists", "message": "Friend already exists"}),
         }
     
@@ -57,5 +77,10 @@ def lambda_handler(event, context):
     # TODO implement    
     return {
         'statusCode': 200,
+        'headers': {
+            'Access-Control-Allow-Headers': 'Content-Type',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
+        },
         'body': json.dumps(user)
     }
