@@ -13,6 +13,11 @@ def lambda_handler(event, context):
     if user is None:
         return {
             'statusCode': 401,
+            'headers': {
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
+            },
             'body': json.dumps({"code": "unauthorized", "message": "Unauthorized"}),
         }
     
@@ -24,6 +29,11 @@ def lambda_handler(event, context):
     if friend not in user['friends']:
         return {
             'statusCode': 404,
+            'headers': {
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
+            },
             'body': json.dumps({"code": "friend_not_found", "message": "Not Found"}),
         }
     
@@ -43,5 +53,10 @@ def lambda_handler(event, context):
     # TODO implement
     return {
         'statusCode': 200,
+        'headers': {
+            'Access-Control-Allow-Headers': 'Content-Type',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
+        },
         'body': json.dumps('New Conversations Created')
     }

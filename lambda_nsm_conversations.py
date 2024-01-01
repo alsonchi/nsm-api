@@ -12,6 +12,11 @@ def lambda_handler(event, context):
     if user is None:
         return {
             'statusCode': 401,
+            'headers': {
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
+            },
             'body': json.dumps({"code": "unauthorized", "message": "Unauthorized"}),
         }
     
@@ -23,5 +28,10 @@ def lambda_handler(event, context):
 
     return {
         'statusCode': 200,
+        'headers': {
+            'Access-Control-Allow-Headers': 'Content-Type',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
+        },
         'body': json.dumps(conversations['Items'])
     }

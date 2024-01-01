@@ -12,6 +12,11 @@ def lambda_handler(event, context):
     if user is None:
         return {
             'statusCode': 401,
+            'headers': {
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
+            },
             'body': json.dumps({"code": "unauthorized", "message": "Unauthorized"}),
         }
     
@@ -29,6 +34,11 @@ def lambda_handler(event, context):
     if conversation['Count'] <= 0:
         return {
             'statusCode': 404,
+            'headers': {
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
+            },
             'body': json.dumps({"code": "conversation_not_found", "message": "Conversation not found"}),
         }
     
@@ -63,6 +73,11 @@ def lambda_handler(event, context):
     
     return {
         'statusCode': 200,
+        'headers': {
+            'Access-Control-Allow-Headers': 'Content-Type',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
+        },
         'body': json.dumps({
             'data': message['Items'],
             'last': message.get('LastEvaluatedKey')
