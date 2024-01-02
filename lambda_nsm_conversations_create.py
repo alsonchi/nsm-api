@@ -44,7 +44,7 @@ def lambda_handler(event, context):
       Item={
         'uuid': str(uuid.uuid4()),
         'users': [
-            user['username'],
+            user['user_name'],
             friend,
         ]
       } 
