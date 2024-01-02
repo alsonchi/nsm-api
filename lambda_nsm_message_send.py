@@ -35,6 +35,7 @@ def lambda_handler(event, context):
     conversationId = data["conversation_id"]
     msgType = data["type"]
     msgBody = data["body"]
+    msgSendAt = str(time.time())
 
     
     #create message record
@@ -44,7 +45,7 @@ def lambda_handler(event, context):
         'uuid': str(uuid.uuid4()),
         'conversation_id': conversationId,
         'sender': user['user_name'],
-        'send_at': str(time.time()),
+        'send_at': msgSendAt,
         'type': msgType,
         'body': msgBody,
       } 
@@ -89,6 +90,8 @@ def lambda_handler(event, context):
     for receiver in receivers['Items']:
         if receiver['ws_connection_id'] is not None:
             sendMsg(receiver['ws_connection_id'], {
+                'sender': user['user_name'],
+                'sendAt': msgSendAt,
                 'conversationId': conversationId,
                 'type': msgType,
                 'body': msgBody,
