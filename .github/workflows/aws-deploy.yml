@@ -27,3 +27,4 @@ jobs:
           aws lambda update-function-code --function-name=nsm-conversations  --zip-file=fileb://lamdba_function.zip
           aws lambda update-function-code --function-name=nsm-message-send  --zip-file=fileb://lamdba_function.zip
           aws lambda update-function-code --function-name=nsm-message  --zip-file=fileb://lamdba_function.zip
+          aws lambda update-function-code --function-name=nsm-profile  --zip-file=fileb://lamdba_function.zip
