@@ -16,11 +16,11 @@ def lambda_handler(event, context):
         }
     
     resource = {
-        'uuid' : user["Items"][0].get('uuid'),
-        'user_name': user["Items"][0].get('user_name'),
-        'display_name' : user["Items"][0].get('display_name'),
-        'avatar' : user["Items"][0].get('avatar'),
-        'status': user["Items"][0].get('status'),
+        'uuid' : user.get('uuid'),
+        'user_name': user.get('user_name'),
+        'display_name' : user.get('display_name'),
+        'avatar' : user.get('avatar'),
+        'status': user.get('status'),
     }
     
     return {
