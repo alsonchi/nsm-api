@@ -40,9 +40,10 @@ def lambda_handler(event, context):
     
     #create new conversation
     conversationTable = dynamodb.Table("nsm-conversation")
+    uuid = str(uuid.uuid4())
     conversationTable.put_item(
       Item={
-        'uuid': str(uuid.uuid4()),
+        'uuid': uuid,
         'users': [
             user['user_name'],
             friend,
@@ -58,5 +59,7 @@ def lambda_handler(event, context):
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
         },
-        'body': json.dumps('New Conversations Created')
+        'body': json.dumps({
+            'conversation_id': uuid,
+        })
     }
